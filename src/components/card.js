@@ -1,10 +1,16 @@
 import { deleteTodolist } from "@/services/apiService";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "next/router";
 import { toast } from "react-hot-toast";
 
 export default function Card({ data }) {
   const queryClient = useQueryClient();
+  const router = useRouter();
   const { id, title, description } = data;
+
+  function form() {
+    router.push({ pathname: "/lists/", query: { id: id } });
+  }
 
   const mutation = useMutation({
     mutationFn: () => deleteTodolist(id),
@@ -38,16 +44,16 @@ export default function Card({ data }) {
           >
             {mutation.isLoading ? "Deleting..." : "Delete"}
           </button>
-          <a
+          <button
             className="btn btn-primary"
-            href="#"
             style={{
               float: "right",
               marginRight: "10px",
             }}
+            onClick={() => form()}
           >
             Update
-          </a>
+          </button>
         </div>
       </div>
     </div>
